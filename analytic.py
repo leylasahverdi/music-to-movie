@@ -20,7 +20,7 @@ class Recommender:
     @st.cache_resource
     def get_model_from_data_folder(_self=None):
         print("Downloading model")
-        MODEL_URL = os.getenv("SPOTIFY_CLIENT_ID") or st.secrets.get("SPOTIFY_CLIENT_ID")
+        MODEL_URL = os.getenv("MODEL_URL") or st.secrets.get("MODEL_URL")
         output_path = os.path.join("DATA", "emotion_score_model.pkl")
 
         if not os.path.exists(output_path):
