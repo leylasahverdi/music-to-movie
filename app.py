@@ -108,9 +108,7 @@ def home_page(queue_data):
         analyzer = PlaylistAnalyzer(access_token)
         all_playlists = analyzer.get_all_playlists()
 
-        if not all_playlists:
-            st.error("🎵 You don’t have any playlists to analyze.")
-        else:
+        if all_playlists:
             top_playlists = analyzer.get_top_playlists(all_playlists)
 
             if not top_playlists:
@@ -132,6 +130,8 @@ def home_page(queue_data):
                 st.session_state.genres = {}
                 st.session_state.playlist_summaries = []
                 st.session_state.genre_counts = Counter()
+        else:
+            most_common_genre = "NotValid"
 
         with main_col:
             st.markdown("### 🎼 Playlists")
@@ -251,9 +251,7 @@ def developer_mode(queue_data):
         else:
             top_playlists = analyzer.get_top_playlists(all_playlists)
 
-            if not top_playlists:
-                st.error("No playlist with enough songs was found.")
-            else:
+            if top_playlists:
                 genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
                 genre_counts.update(genres)
 
