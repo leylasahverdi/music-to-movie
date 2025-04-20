@@ -15,7 +15,7 @@ import os
 
 load_dotenv()
 
-CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
+CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID") or st.secrets.get("SPOTIFY_CLIENT_ID")
 REDIRECT_URI = "https://3acb-78-183-96-196.ngrok-free.app"
 SCOPE = "user-read-email user-read-private user-read-playback-state user-top-read"
 
