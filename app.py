@@ -107,9 +107,17 @@ def home_page(queue_data):
     if selected == "Playlists":
         analyzer = PlaylistAnalyzer(access_token)
         all_playlists = analyzer.get_all_playlists()
-        top_playlists = analyzer.get_top_playlists(all_playlists)
-        genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
-        genre_counts.update(genres)
+
+        if not all_playlists:
+            st.error("🎵 You don’t have any playlists to analyze.")
+        else:
+            top_playlists = analyzer.get_top_playlists(all_playlists)
+
+            if not top_playlists:
+                st.error("No playlist with enough songs was found.")
+            else:
+                genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
+                genre_counts.update(genres)
 
         if genre_counts:
             most_common_genre = genre_counts.most_common(1)[0][0]
@@ -125,19 +133,22 @@ def home_page(queue_data):
         with main_col:
             st.markdown("### 🎼 Playlists")
             with st.container(height=500, border=True):
-                for playlist in playlist_summaries:
-                    name = playlist["name"]
-                    image = playlist["image"]
-                    track_count = playlist["track_count"]
+                if not all_playlists:
+                    st.error("🎵 You don’t have any playlists to analyze.")
+                else:
+                    for playlist in playlist_summaries:
+                        name = playlist["name"]
+                        image = playlist["image"]
+                        track_count = playlist["track_count"]
 
-                    with st.container():
-                        cols = st.columns([1, 3])
-                        with cols[0]:
-                            st.image(image, width=100)
-                        with cols[1]:
-                            st.markdown(f"### 📀 {name}")
-                            st.markdown(f"🎵 **Number of Songs:** {track_count}")
-                    st.divider()
+                        with st.container():
+                            cols = st.columns([1, 3])
+                            with cols[0]:
+                                st.image(image, width=100)
+                            with cols[1]:
+                                st.markdown(f"### 📀 {name}")
+                                st.markdown(f"🎵 **Number of Songs:** {track_count}")
+                        st.divider()
         with movie_col:
             st.markdown(f"### 🎬 Movie Suggestion ({most_common_genre})")
             result = recommender.recommend_varied_films(most_common_genre)
@@ -253,19 +264,22 @@ def developer_mode(queue_data):
         with main_col:
             st.markdown("### 🎼 Playlists")
             with st.container(height=500, border=True):
-                for playlist in playlist_summaries:
-                    name = playlist["name"]
-                    image = playlist["image"]
-                    track_count = playlist["track_count"]
+                if not all_playlists:
+                    st.error("🎵 You don’t have any playlists to analyze.")
+                else:
+                    for playlist in playlist_summaries:
+                        name = playlist["name"]
+                        image = playlist["image"]
+                        track_count = playlist["track_count"]
 
-                    with st.container():
-                        cols = st.columns([1, 3])
-                        with cols[0]:
-                            st.image(image, width=100)
-                        with cols[1]:
-                            st.markdown(f"### 📀 {name}")
-                            st.markdown(f"🎵 **Number of Songs:** {track_count}")
-                    st.divider()
+                        with st.container():
+                            cols = st.columns([1, 3])
+                            with cols[0]:
+                                st.image(image, width=100)
+                            with cols[1]:
+                                st.markdown(f"### 📀 {name}")
+                                st.markdown(f"🎵 **Number of Songs:** {track_count}")
+                        st.divider()
 
         with chart_col:
             st.markdown("### 🍰 Genre Chart")
