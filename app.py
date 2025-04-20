@@ -246,9 +246,7 @@ def developer_mode(queue_data):
         analyzer = PlaylistAnalyzer(access_token)
         all_playlists = analyzer.get_all_playlists()
 
-        if not all_playlists:
-            st.error("🎵 You don’t have any playlists to analyze.")
-        else:
+        if all_playlists:
             top_playlists = analyzer.get_top_playlists(all_playlists)
 
             if top_playlists:
