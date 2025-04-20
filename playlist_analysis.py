@@ -50,6 +50,8 @@ class PlaylistAnalyzer:
 
         for playlist in playlists:
             details = self.get_playlist_details(playlist["id"])
+            if not details:
+                continue
             artist_ids = self.extract_artist_ids_from_playlist(details)
 
             for artist_id in artist_ids:

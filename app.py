@@ -105,7 +105,6 @@ def home_page(queue_data):
                             st.markdown("---")
 
     if selected == "Playlists":
-        # Playlist analizi
         analyzer = PlaylistAnalyzer(access_token)
         all_playlists = analyzer.get_all_playlists()
         top_playlists = analyzer.get_top_playlists(all_playlists)
@@ -194,7 +193,6 @@ def developer_mode(queue_data):
                             all_genres = []
                             for artist_id in artist_ids:
                                 genres = get_artist_genres(artist_id, access_token=access_token)
-                                print("DEBUG: " + str(genres))
                                 all_genres.extend(genres)
                                 genre_counts.update(genres)
 
@@ -231,12 +229,19 @@ def developer_mode(queue_data):
                     st.divider()
 
     if selected == "Playlists":
-        # Playlist analizi
         analyzer = PlaylistAnalyzer(access_token)
         all_playlists = analyzer.get_all_playlists()
-        top_playlists = analyzer.get_top_playlists(all_playlists)
-        genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
-        genre_counts.update(genres)
+
+        if not all_playlists:
+            st.error("🎵 You don’t have any playlists to analyze.")
+        else:
+            top_playlists = analyzer.get_top_playlists(all_playlists)
+
+            if not top_playlists:
+                st.error("No playlist with enough songs was found.")
+            else:
+                genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
+                genre_counts.update(genres)
 
         st.session_state.top_playlists = top_playlists
         st.session_state.genres = genres
@@ -266,7 +271,6 @@ def developer_mode(queue_data):
             st.markdown("### 🍰 Genre Chart")
             with st.container(height=500, border=True):
                 if genre_counts:
-                    print("DEBUG: " + str(genre_counts))
                     genre_df = pd.DataFrame(genre_counts.items(), columns=["Genre", "Count"])
                     fig = px.pie(genre_df, values="Count", names="Genre", title="Genre Distribution", hole=0.4)
                     st.plotly_chart(fig, use_container_width=True)

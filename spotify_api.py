@@ -23,7 +23,7 @@ def get_artist_genres(artist_id, access_token):
         "Authorization": f"Bearer {access_token}"
     }
     res = requests.get(url, headers=headers)
-    print("DEBUG3: " + str(res.status_code))
+    print("SPOTIFY GET ARTIST ENDPOINT STATUS CODE: " + str(res.status_code))
     if res.status_code == 200:
         return res.json().get("genres", [])
     else:
