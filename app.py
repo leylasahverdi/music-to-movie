@@ -119,16 +119,19 @@ def home_page(queue_data):
                 genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
                 genre_counts.update(genres)
 
-        if genre_counts:
-            most_common_genre = genre_counts.most_common(1)[0][0]
-            st.markdown(f"🎧 Founded Genre: **{most_common_genre}**")
-        else:
-            most_common_genre = "NotValid"
+                st.session_state.top_playlists = top_playlists
+                st.session_state.genres = genres
+                st.session_state.playlist_summaries = playlist_summaries
+                st.session_state.genre_counts = genre_counts
 
-        st.session_state.top_playlists = top_playlists
-        st.session_state.genres = genres
-        st.session_state.playlist_summaries = playlist_summaries
-        st.session_state.genre_counts = genre_counts
+                most_common_genre = genre_counts.most_common(1)[0][0]
+                st.markdown(f"🎧 Founded Genre: **{most_common_genre}**")
+
+            if not top_playlists:
+                st.session_state.top_playlists = []
+                st.session_state.genres = {}
+                st.session_state.playlist_summaries = []
+                st.session_state.genre_counts = Counter()
 
         with main_col:
             st.markdown("### 🎼 Playlists")
@@ -254,10 +257,19 @@ def developer_mode(queue_data):
                 genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
                 genre_counts.update(genres)
 
-        st.session_state.top_playlists = top_playlists
-        st.session_state.genres = genres
-        st.session_state.playlist_summaries = playlist_summaries
-        st.session_state.genre_counts = genre_counts
+                st.session_state.top_playlists = top_playlists
+                st.session_state.genres = genres
+                st.session_state.playlist_summaries = playlist_summaries
+                st.session_state.genre_counts = genre_counts
+
+                most_common_genre = genre_counts.most_common(1)[0][0]
+                st.markdown(f"🎧 Founded Genre: **{most_common_genre}**")
+
+            if not top_playlists:
+                st.session_state.top_playlists = []
+                st.session_state.genres = {}
+                st.session_state.playlist_summaries = []
+                st.session_state.genre_counts = Counter()
 
         main_col, chart_col, genre_col = st.columns([1, 1, 1])
 
