@@ -112,7 +112,11 @@ def home_page(queue_data):
         genres, playlist_summaries = analyzer.analyze_genres_from_playlists(top_playlists)
         genre_counts.update(genres)
 
-        most_common_genre = genre_counts.most_common(1)[0][0]
+        if genre_counts:
+            most_common_genre = genre_counts.most_common(1)[0][0]
+            st.markdown(f"🎧 Founded Genre: **{most_common_genre}**")
+        else:
+            most_common_genre = "NotValid"
 
         st.session_state.top_playlists = top_playlists
         st.session_state.genres = genres
@@ -136,8 +140,8 @@ def home_page(queue_data):
                             st.markdown(f"🎵 **Number of Songs:** {track_count}")
                     st.divider()
         with movie_col:
-            result = recommender.recommend_varied_films(most_common_genre)
             st.markdown(f"### 🎬 Movie Suggestion ({most_common_genre})")
+            result = recommender.recommend_varied_films(most_common_genre)
             print("DEBUG_ML: \n" + str(result))
             with st.container(height=500, border=True):
                 for i, row in result.iterrows():
@@ -147,9 +151,10 @@ def home_page(queue_data):
                             st.image("image/Netflix_icon.svg", use_container_width=True)
                         with col2:
                             st.markdown(f"### {row['title']}")
-                            st.markdown(f"- 🎭 Emotion Score: {row['emotion_score']}")
                             st.markdown(f"- ⭐ IMDb: {row['vote_average']}")
-                            st.markdown(f"- 🧠 Final Score: {row['final_score']:.2f}")
+                            if not pd.isna(row.get("emotion_score")):
+                                st.markdown(f"- 🎭 Emotion Score: {row['emotion_score']}")
+                                st.markdown(f"- 🧠 Final Score: {row['final_score']:.2f}")
                         st.markdown("---")
 
 
