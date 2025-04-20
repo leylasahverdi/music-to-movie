@@ -1,8 +1,13 @@
+import streamlit as st
 import pandas as pd
 import joblib
+import gdown
+import pickle
+import os
 
 class Recommender:
     def __init__(self, model_path="DATA/emotion_score_model.pkl", data_path="DATA/movie_df_ml.csv"):
+        self.get_model_from_data_folder()
         self.model = joblib.load(model_path)
         self.movie_df = pd.read_csv(
                             data_path,
@@ -11,6 +16,22 @@ class Recommender:
                         )
         self.movie_df["emotion_score"] = pd.to_numeric(self.movie_df["emotion_score"], errors="coerce")
         self.X_columns = self.model.feature_names_in_
+
+    @st.cache_resource
+    def get_model_from_data_folder(_self=None):
+        print("Downloading model")
+        MODEL_URL = os.getenv("SPOTIFY_CLIENT_ID") or st.secrets.get("SPOTIFY_CLIENT_ID")
+        output_path = os.path.join("DATA", "emotion_score_model.pkl")
+
+        if not os.path.exists(output_path):
+            print("Downloading model with gdown")
+            gdown.download(MODEL_URL, output_path, quiet=False)
+
+        with open(output_path, "rb") as f:
+            print("Model loaded")
+            model = pickle.load(f)
+
+        return model
 
     def recommend_varied_films(self, genre_keyword, tolerance=3.0, top_n=3, candidate_pool=15):
         matched_cols = [col for col in self.X_columns if genre_keyword.lower() in col.lower()]
