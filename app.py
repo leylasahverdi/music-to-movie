@@ -16,7 +16,7 @@ import os
 load_dotenv()
 
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID") or st.secrets.get("SPOTIFY_CLIENT_ID")
-REDIRECT_URI = "https://music2movie.streamlit.app/"
+REDIRECT_URI = "https://3acb-78-183-96-196.ngrok-free.app"
 SCOPE = "user-read-email user-read-private user-read-playback-state user-top-read"
 
 # Giriş URL'si oluştur
@@ -468,7 +468,13 @@ if st.session_state.access_token:
 
             if st.button("🔒Log out", help="logout", key="logout"):
                 st.session_state.pop("access_token", None)
-                st.rerun()
+                st.session_state.clear()
+                st.markdown(
+                    f"""
+                        <meta http-equiv="refresh" content="0; url={REDIRECT_URI}">
+                        """,
+                    unsafe_allow_html=True
+                )
 
         else:
             st.error("❌ Spotify user information could not be retrieved. Please make sure you are logged in.")
