@@ -1,0 +1,8 @@
+streamlit
+streamlit-option-menu
+pandas
+requests
+plotly
+joblib
+scikit-learn
+python-dotenv
