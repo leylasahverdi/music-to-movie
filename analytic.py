@@ -17,6 +17,7 @@ class Recommender:
         self.movie_df["emotion_score"] = pd.to_numeric(self.movie_df["emotion_score"], errors="coerce")
         self.X_columns = self.model.feature_names_in_
 
+    @st.cache_resource
     def get_model_from_data_folder(_self=None):
         print("Downloading model")
         MODEL_URL = os.getenv("MODEL_URL") or st.secrets.get("MODEL_URL")
