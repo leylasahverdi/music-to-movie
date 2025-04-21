@@ -8,6 +8,7 @@ from collections import Counter
 from playlist_analysis import PlaylistAnalyzer
 from analytic import Recommender
 from dotenv import load_dotenv
+from imdb_movie_poster import get_poster_url_by_title
 import plotly.express as px
 import requests
 import time
@@ -82,20 +83,24 @@ def home_page(queue_data):
 
                     if genre_counts:
                         most_common_genre = genre_counts.most_common(1)[0][0]
-                        st.markdown(f"🎧 Founded Genre: **{most_common_genre}**")
                     else:
                         most_common_genre = "NotValid"
 
             with movie_col:
                 st.markdown(f"### 🎬 Movie Suggestion ({most_common_genre})")
                 result = recommender.recommend_varied_films(most_common_genre)
+                print("FOUNDED GENRE: " + str(most_common_genre))
                 print("DEBUG_ML: \n" + str(result))
                 with st.container(height=500, border=True):
                     for i, row in result.iterrows():
                         with st.container():
                             col1, col2 = st.columns([1, 3])
                             with col1:
-                                st.image("image/Netflix_icon.svg", use_container_width=True)
+                                poster_url = get_poster_url_by_title(row['title'])
+                                if poster_url and poster_url != "N/A":
+                                    st.image(poster_url, use_container_width=True)
+                                else:
+                                    st.image("image/Netflix_icon.svg", use_container_width=True)
                             with col2:
                                 st.markdown(f"### {row['title']}")
                                 st.markdown(f"- ⭐ IMDb: {row['vote_average']}")
@@ -155,13 +160,18 @@ def home_page(queue_data):
         with movie_col:
             st.markdown(f"### 🎬 Movie Suggestion ({most_common_genre})")
             result = recommender.recommend_varied_films(most_common_genre)
+            print("FOUNDED GENRE: " + str(most_common_genre))
             print("DEBUG_ML: \n" + str(result))
             with st.container(height=500, border=True):
                 for i, row in result.iterrows():
                     with st.container():
                         col1, col2 = st.columns([1, 3])
                         with col1:
-                            st.image("image/Netflix_icon.svg", use_container_width=True)
+                            poster_url = get_poster_url_by_title(row['title'])
+                            if poster_url and poster_url != "N/A":
+                                st.image(poster_url, use_container_width=True)
+                            else:
+                                st.image("image/Netflix_icon.svg", use_container_width=True)
                         with col2:
                             st.markdown(f"### {row['title']}")
                             st.markdown(f"- ⭐ IMDb: {row['vote_average']}")

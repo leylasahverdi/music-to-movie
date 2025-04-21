@@ -26,7 +26,7 @@ class PlaylistAnalyzer:
         response = requests.get(url, headers=self.headers)
         return response.json()
 
-    def get_top_playlists(self, playlists, n=2):
+    def get_top_playlists(self, playlists, n=3):
         sorted_playlists = sorted(playlists, key=lambda x: x["tracks"]["total"], reverse=True)
         return sorted_playlists[:n]
 
