@@ -351,11 +351,54 @@ if st.session_state.access_token:
 
     # Sidebar tasarımı
     with st.sidebar:
-        st.markdown("## 🎵 Music to Movie")
+        st.markdown(
+            f"""
+                    <div 
+                        style="
+                            text-align: center;
+                            margin-left: 12px; 
+                            margin-bottom: 50px; 
+                            font-weight: bold;
+                            font-size: 30px;
+                    ">
+                        🎵 Music to Movie
+                    </div>
+                    """,
+            unsafe_allow_html=True
+        )
 
         if user_image:
-            st.image(user_image, width=80)
-        st.markdown(f"**{user_name}**")
+            st.markdown(
+                f"""
+                <div style="text-align: center;">
+                    <img 
+                        src="{user_image}" 
+                        style="
+                            width:150px; 
+                            border-radius: 10px; 
+                            margin-left: 10px;
+                            margin-bottom: 15px;
+                    ">
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        st.markdown(
+            f"""
+            <div 
+                style="
+                    text-align: center;
+                    margin-left: 12px; 
+                    margin-bottom: 30px; 
+                    font-weight: bold;
+                    font-size: 24px;
+            ">
+                {user_name}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
         selected = option_menu(
             menu_title=None,
@@ -443,7 +486,7 @@ if st.session_state.access_token:
                 cols = st.columns([1, 3])
                 with cols[0]:
                     if profile_pic:
-                        st.image(profile_pic, width=100)
+                        st.image(profile_pic, use_container_width=True)
                     else:
                         st.info("No Profile Image.")
                 with cols[1]:
