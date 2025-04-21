@@ -297,7 +297,7 @@ def developer_mode(queue_data):
                     fig = px.pie(genre_df, values="Count", names="Genre", title="Genre Distribution", hole=0.4)
                     st.plotly_chart(fig, use_container_width=True)
                 else:
-                    st.info("🎧 No genre found.")
+                    st.error("🎧 No genre found.")
                 st.divider()
 
         with genre_col:
